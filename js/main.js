@@ -1,0 +1,10 @@
+import { getUser } from './getUser.js';
+import { createUser } from './createUser.js';
+import { updateUser } from './updateUser.js';
+import { deleteUser } from './deleteUser.js';
+import { getAll } from './getAll.js';
+window.getUser = getUser;
+window.createUser = createUser;
+window.updateUser = updateUser;
+window.deleteUser = deleteUser;
+window.getAll = getAll;
