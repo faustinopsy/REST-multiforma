@@ -1,6 +1,15 @@
-export function createUser() {
+document.getElementById('submitButton').addEventListener('click', createUser);
+
+function createUser() {
+    const nomeUsuario = document.getElementById('username').value;
+
+    if (!nomeUsuario) {
+        alert("Por favor, insira um nome!");
+        return;
+    }
+
     const usuario = {
-        nome: "Carlos"
+        nome: nomeUsuario
     };
 
     fetch('/backend/usuario', { 
@@ -10,14 +19,19 @@ export function createUser() {
         },
         body: JSON.stringify(usuario)
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if(!data.codigo){
+            alert('Usuário já existe')
+        }else{
             alert("Usuário criado: " + JSON.stringify(data));
-        })
-        .catch(error => alert('Erro na requisição: ' + error));
+        } 
+       
+    })
+    .catch(error => alert('Erro na requisição: ' + error));
 }

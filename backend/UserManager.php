@@ -1,43 +1,70 @@
 <?php
-require_once 'Users.php';
-require_once 'AdminUser.php';
+require_once 'Model.php';
+require_once 'User.php';
 
 class UserManager {
 
+    protected $model;
+
+    public function __construct() {
+        $this->model = new Model();
+    }
+
     public function getUserById($id) {
-        return new User($id, 'Carlos');  
+        $data = $this->model->read('users', ['id' => $id]);
+        if (!empty($data)) {
+            $user = new User();
+            $user->setId($data[0]['id']);
+            $user->setNome($data[0]['nome']);
+            return $user;
+        } else {
+            return false;
+        }
     }
 
     public function getAllUsers() {
-        $users = [
-            new User(1, 'Carlos'),
-            new User(2, 'Ana'),
-            new User(3, 'Roberto'),
-            new User(4, 'Maria')
-        ];
-        $usuariosArray = array_map(function($users) {
-            return $users->toArray();
-        }, $users);
-        return $usuariosArray;
+        $data = $this->model->read('users');
+        $users = [];
+
+        foreach ($data as $userData) {
+            $user = new User();
+            $user->setId($userData['id']);
+            $user->setNome($userData['nome']);
+            $users[] = $user;
+        }
+
+        return $data;
     }
 
-    public function createUser($nome) {
-        return new User(2, $nome); 
+    public function createUser($data) {
+        $resultado= $this->model->read('users', ['nome' => $data['nome']]);
+        if($resultado[0]["nome"]==$data['nome']){
+            return false;
+        }
+        $user = new User();
+        $user->setNome($data["nome"]);
+        return $this->model->create('users', ['nome' => $user->getNome()]);
     }
 
-    public function updateUser($id, $nome) {
-        $user = $this->getUserById($id);  
-        $user->setNome($nome);
-        return $user->getId();
+    public function updateUser($id, $data) {
+        $resultado=$this->getUserById($id);
+        if(!$resultado){
+            return false;
+        }
+        $user = new User();
+        $user->setId($id);
+        $user->setNome($data["nome"]);
+        return $this->model->update('users', ['nome' => $user->getNome()], ['id' => $user->getId()]);
     }
 
     public function deleteUser($id) {
-        
-        return true;
+        $resultado=$this->getUserById($id);
+        if(!$resultado){
+            return false;
+        }
+        $user = new User();
+        $user->setId($id);
+        return $this->model->delete('users', ['id' => $user->getId()]);
     }
 
-    
-    public function createAdmin($nome, $privileges) {
-        return new AdminUser(5, $nome, $privileges); 
-    }
 }

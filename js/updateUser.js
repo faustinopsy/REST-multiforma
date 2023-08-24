@@ -1,23 +1,31 @@
-export function updateUser() {
+function updateUser() {
+    const userId = document.getElementById("getUserId").value;
+    const userName = document.getElementById("updateUserName").value;
+
     const usuarioAtualizado = {
-        nome: "Carlos da Silva"
+        nome: userName
     };
 
-    fetch('/backend/usuario/1', { 
+    fetch('/backend/usuario/' + userId, { 
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(usuarioAtualizado)
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if(!data.codigo){
+            alert("Não pode atualizar: ");
+        }else{
             alert("Usuário atualizado: " + JSON.stringify(data));
-        })
-        .catch(error => alert('Erro na requisição: ' + error));
+        } 
+        
+    })
+    .catch(error => alert('Erro na requisição: ' + error));
 }

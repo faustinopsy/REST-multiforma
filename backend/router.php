@@ -31,6 +31,15 @@ class Router {
                 '/backend/usuario/{id}' => function ($id) {
                     header("HTTP/1.1 200 OK");
                     $usuario = $this->userManager->getUserById($id);
+                    if(!$usuario){
+                        $data = [
+                            'codigo' => false,
+                            'mensagem' => "Usuário  não encontrado",
+                            'description' => "",
+                            'usuario' => ""
+                        ];
+                        return json_encode($data);
+                    }
                     $data = [
                         'codigo' => 0,
                         'mensagem' => "Usuário recuperado com sucesso",
@@ -55,7 +64,16 @@ class Router {
                 '/backend/usuario' => function () {
                     header("HTTP/1.1 201 Created");
                     $body = json_decode(file_get_contents('php://input'), true);
-                    $usuario = $this->userManager->createUser($body['nome']);
+                    $usuario = $this->userManager->createUser($body);
+                    if(!$usuario){
+                        $data = [
+                            'codigo' => false,
+                            'mensagem' => "Usuário já existe",
+                            'description' => "",
+                            'usuario' => ""
+                        ];
+                        return json_encode($data);
+                    }
                     $data = [
                         'codigo' => 0,
                         'mensagem' => "Usuário criado com sucesso",
@@ -69,7 +87,16 @@ class Router {
                 '/backend/usuario/{id}' => function ($id) {
                     header("HTTP/1.1 200 OK");
                     $body = json_decode(file_get_contents('php://input'), true);
-                    $usuario = $this->userManager->updateUser($id, $body['nome']);
+                    $usuario = $this->userManager->updateUser($id, $body);
+                    if(!$usuario){
+                        $data = [
+                            'codigo' => false,
+                            'mensagem' => "Usuário não encontrado",
+                            'description' => "",
+                            'usuario' => ""
+                        ];
+                        return json_encode($data);
+                    }
                     $data = [
                         'codigo' => 0,
                         'mensagem' => "Usuário atualizado com sucesso",
@@ -91,7 +118,7 @@ class Router {
                         ];
                     } else {
                         $data = [
-                            'codigo' => 1,
+                            'codigo' => false,
                             'mensagem' => "Erro ao deletar o usuário",
                             'description' => "Ocorreu um problema ao tentar deletar o usuário com ID $id"
                         ];

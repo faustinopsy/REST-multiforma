@@ -1,11 +1,11 @@
 <?php
+
 class User {
     private $id;
     private $nome;
 
-    public function __construct($id, $nome) {
-        $this->setId($id);
-        $this->setNome($nome);
+    public function __construct() {
+      
     }
 
     public function getId() {
@@ -32,5 +32,3 @@ class User {
         return ['id' => $this->getId(), 'nome' => $this->getNome(), 'type' => $this->getType()];
     }
 }
-
-
