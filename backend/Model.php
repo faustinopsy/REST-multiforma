@@ -68,105 +68,65 @@
   }
 }
 
-// a função recebe dois argumentos, 1º a tabela do banco,e 2º os dados em um array
 public function create($table, $data) {
-// Junta as chaves do array $data em uma única string(as colunas da tabela), separadas por vírgulas
  $columns = implode(", ", array_keys($data));
-// Mapeia as chaves do array $data para criar placeholders(os dados de inserção), e junta em uma única string separada por vírgulas
  $placeholders = implode(", ", array_map(function($item) {
      return ":$item"; 
  }, array_keys($data)));
-
-// Cria a query SQL de inserção com o nome da tabela, colunas e placeholders
  $query = "INSERT INTO $table ($columns) VALUES ($placeholders)";
-// Prepara a query SQL para execução
  $stmt = $this->conn->prepare($query);
-
-// Vincula os valores do array $data aos respectivos placeholders na query
   foreach ($data as $key => $value) {
       $stmt->bindValue(":$key", $value);
   }
-
-// Executa a query e retorna o resultado (true para sucesso, false para falha)
     return $stmt->execute();
 }
 
-// a função recebe dois argumentos, a tabela do banco, e a condição em formato de array
 public function read($table, $conditions = []) {
-// Cria a query SQL de seleção com o nome da tabela
 $query = "SELECT * FROM $table";
-
-// Verifica se o array $conditions não está vazio
  if (!empty($conditions)) {
-// Mapeia as chaves do array $conditions para criar condições, e junta em uma única string separada por 'AND'
     $conditionsStr = implode(" AND ", array_map(function($item) {
        return "$item = :$item";
        }, array_keys($conditions)));
-// Adiciona a cláusula WHERE com as condições à query SQL
     $query .= " WHERE $conditionsStr";
 }
-
-// Prepara a query SQL para execução
 $stmt = $this->conn->prepare($query);
-
-// Vincula os valores do array $conditions aos respectivos placeholders na query
 foreach ($conditions as $key => $value) {
     $stmt->bindValue(":$key", $value);
 }
-
-// Executa a query
  $stmt->execute();
 
-// Retorna todos os registros encontrados como um array associativo
    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// a função recebe três argumentos, 1º a tabela do banco,e 2º os dados em um array e 3º a condição
 public function update($table, $data, $conditions) {
- // Mapeia as chaves do array $data para criar atribuições e junta em uma única string separada por vírgulas
 $dataStr = implode(", ", array_map(function($item) {
     return "$item = :$item"; 
 }, array_keys($data)));
-// Mapeia as chaves do array $conditions para criar condições e junta em uma única string separada por 'AND'
 $conditionsStr = implode(" AND ", array_map(function($item) { 
     return "$item = :condition_$item"; 
  }, array_keys($conditions)));
-// Cria a query SQL de atualização com o nome da tabela, atribuições e condições
 $query = "UPDATE $table SET $dataStr WHERE $conditionsStr";
-// Prepara a query SQL para execução
 $stmt = $this->conn->prepare($query);
-
-// Vincula os valores do array $data aos respectivos placeholders na query
 foreach ($data as $key => $value) {
     $stmt->bindValue(":$key", $value);
  }
 
-// Vincula os valores do array $conditions aos respectivos placeholders na query
 foreach ($conditions as $key => $value) {
     $stmt->bindValue(":condition_$key", $value);
  }
 
-// Executa a consulta e retorna o resultado (true em caso de sucesso, false em caso de falha)
    return $stmt->execute();
 }
 
-// a função recebe dois argumentos, 1º a tabela do banco,e 2º a condição
 public function delete($table, $conditions) {
-  // Mapeia as chaves do array $conditions para criar condições e junta em uma única string separada por 'AND'
 $conditionsStr = implode(" AND ", array_map(function($item) {
   return "$item = :$item"; 
   }, array_keys($conditions)));
-
-// Cria a consulta SQL de exclusão com o nome da tabela e condições
 $query = "DELETE FROM $table WHERE $conditionsStr";
-// Prepara a consulta SQL para execução
 $stmt = $this->conn->prepare($query);
-
-// Vincula os valores do array $conditions aos respectivos placeholders na consulta
 foreach ($conditions as $key => $value) {
    $stmt->bindValue(":$key", $value);
  }
-// Executa a consulta e retorna o resultado (true em caso de sucesso, false em caso de falha)
   return $stmt->execute();
   }
 }
