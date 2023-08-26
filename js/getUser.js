@@ -9,10 +9,11 @@ function getUser() {
         return response.json();
     })
     .then(data => {
-        if(!data.codigo){
+        if(!data.status){
             alert('Usuário não encontrado')
+            document.getElementById("inpuNome").value = ''; 
         }else{
-            document.getElementById("updateUserName").value = data.usuario.nome; 
+            document.getElementById("inpuNome").value = data.usuario.nome; 
         } 
        
     })

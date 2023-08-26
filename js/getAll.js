@@ -15,14 +15,14 @@ function getAll() {
 }
 
 function displayUsers(data) {
-    const users = data.usuarios;  // pegando o array 'usuarios' do objeto data
+    const users = data.usuarios;  
     const usersDiv = document.getElementById('usersList');
-    usersDiv.innerHTML = ''; // Limpa a lista atual
+    usersDiv.innerHTML = ''; 
 
     const list = document.createElement('ul');
     users.forEach(user => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${user.id} - ${user.nome} - ${user.email}`; // Supondo que cada usuário tenha propriedades 'id', 'nome' e 'email'
+        listItem.textContent = `${user.id} - ${user.nome} - ${user.email}`;
         list.appendChild(listItem);
     });
 

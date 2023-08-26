@@ -1,6 +1,8 @@
 <?php
-require_once 'Model.php';
-require_once 'User.php';
+namespace App;
+
+use App\Model\Model;
+use App\User\User;
 
 class UserManager {
 
@@ -13,10 +15,12 @@ class UserManager {
     public function getUserById($id) {
         $data = $this->model->read('users', ['id' => $id]);
         if (!empty($data)) {
+            $users=[];
             $user = new User();
             $user->setId($data[0]['id']);
             $user->setNome($data[0]['nome']);
-            return $user;
+            $users=['id'=>$user->getId(),'nome'=>$user->getNome()];
+        return $users;
         } else {
             return false;
         }
@@ -30,10 +34,10 @@ class UserManager {
             $user = new User();
             $user->setId($userData['id']);
             $user->setNome($userData['nome']);
-            $users[] = $user;
+            $users[]=['id'=>$user->getId(),'nome'=>$user->getNome()];
         }
 
-        return $data;
+        return $users;
     }
 
     public function createUser($data) {
@@ -54,7 +58,11 @@ class UserManager {
         $user = new User();
         $user->setId($id);
         $user->setNome($data["nome"]);
-        return $this->model->update('users', ['nome' => $user->getNome()], ['id' => $user->getId()]);
+        $sucesso= $this->model->update('users', ['nome' => $user->getNome()], ['id' => $user->getId()]);
+        if(!$sucesso){
+            return false;
+        }
+        return true;
     }
 
     public function deleteUser($id) {
