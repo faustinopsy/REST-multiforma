@@ -31,7 +31,7 @@ function displayUsers(data) {
     const list = document.createElement('ul');
     users.forEach(user => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${user.id} - ${user.nome} - ${user.email}`; 
+        listItem.textContent = `${user.id} - ${user.nome} - ${user.type}`; 
         list.appendChild(listItem);
     });
 
