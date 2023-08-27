@@ -40,7 +40,7 @@ class User {
 ```sh
  require 'vendor/autoload.php';
 
-use App\UserManager;
+use App\User;
  ```
  
 Depois, execute o comando composer install para gerar o arquivo vendor/autoload.php.
