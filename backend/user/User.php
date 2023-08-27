@@ -3,6 +3,7 @@ namespace App\User;
 class User {
     private $id;
     private $nome;
+    private $senha;
 
     public function __construct() {
       
@@ -18,6 +19,13 @@ class User {
 
     public function getNome() {
         return $this->nome;
+    }
+
+    public function setSenha($senha) {
+        $this->senha = password_hash($senha, PASSWORD_DEFAULT)
+    }
+    public function getSenha() {
+        return $this->senha;
     }
 
     public function setNome($nome) {
