@@ -5,21 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário de Usuário</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/vue.js"></script>
+    <script src="js/vue-router.js" ></script>
+    <script src="js/createUser.js" type="module"></script>
+    <script src="js/getAll.js" type="module"></script>
+    <script src="js/getUser.js" type="module"></script>
+    <script src="js/token.js"> type="module"</script>
+    <script src="js/index.js" type="module"></script>
 </head>
-<body>
-    <div class="card">
-        <h1>Escolha a Opção</h1>
-        <a href="criar.html">Cadastrar</a><br>
-        <a href="todos.html">Listar todos</a>
-        <a href="busca.html">Buscar</a>
-    </div>
-    <script>
-        window.onload = function() {
-            fetch('/backend/token')
-                .then(response => response.json())
-                .then(data => localStorage.setItem('token', data.token));
-        }
+        <body>
+            <div class="card">
+                <h1>Escolha a Opção</h1>
+                <a href="#/criar" class="btn">Cadastrar</a>
+                <a href="#/listar" class="btn">Listar</a>
+                <a href="#/buscar" class="btn">Buscar</a>
         
-    </script>
-</body>
+            
+                <div class="card">
+                  
+                    
+                    <div id="app"> </div>
+                </div>
+            </div>
+                <router-view></router-view>
+           
+            
+           
+        </body>
 </html>

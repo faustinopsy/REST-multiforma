@@ -1,27 +1,38 @@
-document.getElementById('getAllButton').addEventListener('click', getAll);
-var token = localStorage.getItem('token');
-function getAll() {
-    const usuarios = JSON.parse(localStorage.getItem('usuarios'));
+const templateTodos = `
+<div>
+<div v-if="usuarios">
+    <ul>
+        <li v-for="usuario in usuarios" :key="usuario.id">
+            {{ usuario.id }} - {{ usuario.nome }} - {{ usuario.type }}
+        </li>
+    </ul>
+</div>
+<div v-else>
+    Não há usuários.
+</div>
+</div>
 
-    if (!usuarios) {
-        alert("Não há usuários");
-        return;
-    }
+        `;
 
-    displayUsers({usuarios: usuarios});
-}
-
-function displayUsers(data) {
-    const users = data.usuarios;  
-    const usersDiv = document.getElementById('usersList');
-    usersDiv.innerHTML = ''; 
-
-    const list = document.createElement('ul');
-    users.forEach(user => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${user.id} - ${user.nome} - ${user.type}`;
-        list.appendChild(listItem);
-    });
-
-    usersDiv.appendChild(list);
-}
+        export default {
+            template: templateTodos,
+            data() {
+                return {
+                    usuarios: null
+                };
+            },
+            created() {
+                this.getAll();
+            },
+            methods: {
+                getAll() {
+                    this.usuarios = JSON.parse(localStorage.getItem('usuarios'));
+                    if (!this.usuarios) {
+                        alert("Não há usuários");
+                        return;
+                    }
+                }
+            }
+        
+        }
+        
