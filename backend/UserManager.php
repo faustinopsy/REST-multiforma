@@ -43,11 +43,11 @@ class UserManager {
             $user = new User();
             $user->setId($userData['id']);
             $user->setNome($userData['nome']);
-            $users[] = $user;
+            $users[]=['id'=>$user->getId(),'nome'=>$user->getNome(),'type' => $user->getType()];
         }
 
-        return $data;
-    }
+        return $users;
+        }
 
     public function createUser($data) {
         $resultado= $this->model->read('users', ['nome' => $data['nome']]);
