@@ -11,11 +11,11 @@ function deleteUser() {
         return response.json();
     })
     .then(data => {
-        if(!data.codigo){
+        if(!data.status){
             alert("Não pode Deletar: ");
         }else{
             alert("Usuário deletado: " + JSON.stringify(data));
-            document.getElementById("updateUserName").value = ''; 
+            document.getElementById("inpuNome").value = ''; 
         } 
         
     })

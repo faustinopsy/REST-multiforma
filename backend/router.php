@@ -11,17 +11,22 @@ class Router {
         $this->requestMethod = $requestMethod;
         $this->uri = $uri;
         $this->userManager = new UserManager();
+        $this->routes();
     }
 
     public function run() {
-        $this->routes();
+        try {
+            $ponte = $this->procurarPonte();
 
-        $handler = $this->findRouteHandler();
-
-        if ($handler) {
-            echo $handler();
-        } else {
-            echo "404 Not Found";
+            if ($ponte) {
+                echo $ponte();
+            } else {
+                header("HTTP/1.1 404 Página não encontrada");
+                echo json_encode(['error' => 'Not Found']);
+            }
+        } catch (\Exception $e) {
+            header("HTTP/1.1 500 Erro interno do Servidor");
+            echo json_encode(['error' => $e->getMessage()]);
         }
     }
 
@@ -30,31 +35,33 @@ class Router {
             'GET' => [
                 '/backend/usuario/{id}' => function ($id) {
                     header("HTTP/1.1 200 OK");
+                    header('Content-Type: application/json');
                     $usuario = $this->userManager->getUserById($id);
                     if(!$usuario){
                         $data = [
-                            'codigo' => false,
+                            'status' => false,
                             'mensagem' => "Usuário  não encontrado",
-                            'description' => "",
+                            'descricao' => "",
                             'usuario' => ""
                         ];
                         return json_encode($data);
                     }
                     $data = [
-                        'codigo' => 0,
+                        'status' => true,
                         'mensagem' => "Usuário recuperado com sucesso",
-                        'description' => "",
+                        'descricao' => "",
                         'usuario' => $usuario->toArray()
                     ];
                     return json_encode($data);
                 },
                 '/backend/usuario' => function () {
                     header("HTTP/1.1 200 OK");
+                    header('Content-Type: application/json');
                     $usuarios = $this->userManager->getAllUsers();
                     $data = [
-                        'codigo' => 0,
+                        'status' => true,
                         'mensagem' => "Usuários recuperados com sucesso",
-                        'description' => "",
+                        'descricao' => "",
                         'usuarios' => $usuarios
                     ];
                     return json_encode($data);
@@ -63,21 +70,22 @@ class Router {
             'POST' => [
                 '/backend/usuario' => function () {
                     header("HTTP/1.1 201 Created");
+                    header('Content-Type: application/json');
                     $body = json_decode(file_get_contents('php://input'), true);
                     $usuario = $this->userManager->createUser($body);
                     if(!$usuario){
                         $data = [
-                            'codigo' => false,
+                            'status' => false,
                             'mensagem' => "Usuário já existe",
-                            'description' => "",
+                            'descricao' => "",
                             'usuario' => ""
                         ];
                         return json_encode($data);
                     }
                     $data = [
-                        'codigo' => 0,
+                        'status' => true,
                         'mensagem' => "Usuário criado com sucesso",
-                        'description' => "",
+                        'descricao' => "",
                         'usuario' => $usuario
                     ];
                     return json_encode($data);
@@ -86,22 +94,23 @@ class Router {
             'PUT' => [
                 '/backend/usuario/{id}' => function ($id) {
                     header("HTTP/1.1 200 OK");
+                    header('Content-Type: application/json');
                     $body = json_decode(file_get_contents('php://input'), true);
                     $usuario = $this->userManager->updateUser($id, $body);
                     if(!$usuario){
                         $data = [
-                            'codigo' => false,
+                            'status' => false,
                             'mensagem' => "Usuário não encontrado",
-                            'description' => "",
+                            'descricao' => "",
                             'usuario' => ""
                         ];
                         return json_encode($data);
                     }
                     $data = [
-                        'codigo' => 0,
+                        'status' => true,
                         'mensagem' => "Usuário atualizado com sucesso",
-                        'description' => "",
-                        'usuario' => $usuario
+                        'descricao' => "",
+                        'usuario' => $id
                     ];
                     return json_encode($data);
                 }
@@ -109,18 +118,19 @@ class Router {
             'DELETE' => [
                 '/backend/usuario/{id}' => function ($id) {
                     header("HTTP/1.1 200 OK");
+                    header('Content-Type: application/json');
                     $success = $this->userManager->deleteUser($id);
                     if ($success) {
                         $data = [
-                            'codigo' => 0,
+                            'status' => true,
                             'mensagem' => "Usuário deletado com sucesso",
-                            'description' => "Usuário com ID $id foi deletado"
+                            'descricao' => "Usuário com ID $id foi deletado"
                         ];
                     } else {
                         $data = [
-                            'codigo' => false,
+                            'status' => false,
                             'mensagem' => "Erro ao deletar o usuário",
-                            'description' => "Ocorreu um problema ao tentar deletar o usuário com ID $id"
+                            'descricao' => "Ocorreu um problema ao tentar deletar o usuário com ID $id"
                         ];
                     }
                     return json_encode($data);
@@ -130,13 +140,13 @@ class Router {
     }
     
 
-    private function findRouteHandler() {
-        foreach ($this->routes[$this->requestMethod] as $route => $handler) {
+    private function procurarPonte() {
+        foreach ($this->routes[$this->requestMethod] as $route => $ponte) {
             $routePattern = preg_replace('/\{.*\}/', '([^/]+)', $route);
             if (preg_match("@^$routePattern$@", $this->uri, $matches)) {
                 array_shift($matches);
-                return function() use ($handler, $matches) {
-                    return call_user_func_array($handler, $matches);
+                return function() use ($ponte, $matches) {
+                    return call_user_func_array($ponte, $matches);
                 };
             }
         }
