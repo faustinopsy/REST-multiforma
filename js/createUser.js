@@ -26,7 +26,7 @@ function createUser() {
         return response.json();
     })
     .then(data => {
-        if(!data.codigo){
+        if(!data.status){
             alert('Usuário já existe')
         }else{
             alert("Usuário criado: " + JSON.stringify(data));

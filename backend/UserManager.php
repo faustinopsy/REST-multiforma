@@ -38,12 +38,21 @@ class UserManager {
 
     public function createUser($data) {
         $resultado= $this->model->read('users', ['nome' => $data['nome']]);
-        if($resultado[0]["nome"]==$data['nome']){
+        if(!empty($resultado)){
+            if($resultado[0]["nome"]==$data['nome']){
+                return false;
+            }
+        }
+        if(!empty($data)){
+            $user = new User();
+            $user->setNome($data["nome"]);
+            $sucesso= $this->model->create('users', ['nome' => $user->getNome()]);
+            return $sucesso;
+        }else{
             return false;
         }
-        $user = new User();
-        $user->setNome($data["nome"]);
-        return $this->model->create('users', ['nome' => $user->getNome()]);
+        
+       
     }
 
     public function updateUser($id, $data) {

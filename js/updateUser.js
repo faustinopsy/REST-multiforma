@@ -1,6 +1,6 @@
 function updateUser() {
     const userId = document.getElementById("getUserId").value;
-    const userName = document.getElementById("updateUserName").value;
+    const userName = document.getElementById("inpuNome").value;
 
     const usuarioAtualizado = {
         nome: userName
@@ -20,7 +20,7 @@ function updateUser() {
         return response.json();
     })
     .then(data => {
-        if(!data.codigo){
+        if(!data.status){
             alert("Não pode atualizar: ");
         }else{
             alert("Usuário atualizado: " + JSON.stringify(data));
