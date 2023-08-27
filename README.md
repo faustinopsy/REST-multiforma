@@ -1,7 +1,7 @@
 # Projeto API CRUD
 Este repositório contém um projeto simples de API CRUD que permite a criação, leitura, atualização e exclusão de usuários. O projeto está disponível em duas versões diferentes, cada uma em sua própria branch:
 
-A branch main contém a versão do projeto que não segue a PSR-4.
+A branch main contém a versão do projeto que NÃO segue a PSR-4, para os exemplos com PSR veja as branchs desse projeto, há no minimo 4 branchs com formatos diferentes.
 A branch (com_psr) contém a versão do projeto que segue a PSR-4.
 PSR-4
 A PSR-4 é uma recomendação da PHP-FIG que define um padrão de autoloading de classes que permite a interoperabilidade de código entre diferentes projetos e suas bibliotecas.
