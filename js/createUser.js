@@ -1,5 +1,5 @@
 document.getElementById('submitButton').addEventListener('click', createUser);
-
+var token = localStorage.getItem('token');
 function createUser() {
     const nomeUsuario = document.getElementById('username').value;
 
@@ -15,13 +15,18 @@ function createUser() {
     fetch('/backend/usuario', { 
         method: 'POST',
         headers: {
+            'Authorization': token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(usuario)
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Sem rede ou não conseguiu localizar o recurso');
+            if (response.status === 401) {
+                throw new Error('Não autorizado');
+            } else {
+                throw new Error('Sem rede ou não conseguiu localizar o recurso');
+            }
         }
         return response.json();
     })

@@ -31,11 +31,27 @@ class Router {
     }
 
     private function routes() {
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+        header('Access-Control-Allow-Headers: Content-Type');
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+
         $this->routes = [
             'GET' => [
                 '/backend/usuario/{id}' => function ($id) {
+                    $autorizado=$this->verificarToken();
+                    if(!$autorizado){
+                        header("HTTP/1.1 401 Não autorizado");
+                        $data = [
+                            'status' => false,
+                            'mensagem' => "Não autorizado",
+                            'descricao' => "Token Não validado",
+                            'usuario' => ""
+                        ];
+                        return json_encode($data);
+                    }
                     header("HTTP/1.1 200 OK");
-                    header('Content-Type: application/json');
                     $usuario = $this->userManager->getUserById($id);
                     if(!$usuario){
                         $data = [
@@ -55,8 +71,18 @@ class Router {
                     return json_encode($data);
                 },
                 '/backend/usuario' => function () {
+                    $autorizado=$this->verificarToken();
+                    if(!$autorizado){
+                        header("HTTP/1.1 401 Não autorizado");
+                        $data = [
+                            'status' => false,
+                            'mensagem' => "Não autorizado",
+                            'descricao' => "Token Não validado",
+                            'usuario' => ""
+                        ];
+                        return json_encode($data);
+                    }
                     header("HTTP/1.1 200 OK");
-                    header('Content-Type: application/json');
                     $usuarios = $this->userManager->getAllUsers();
                     $data = [
                         'status' => true,
@@ -65,12 +91,31 @@ class Router {
                         'usuarios' => $usuarios
                     ];
                     return json_encode($data);
-                }
+                },
+                '/backend/token' => function () {
+                    header("HTTP/1.1 200 OK");
+                    $token = $this->userManager->generateToken();
+                    $data = [
+                        'status' => true,
+                        'token' => $token,
+                    ];
+                    return json_encode($data);
+                },
             ],
             'POST' => [
                 '/backend/usuario' => function () {
+                    $autorizado=$this->verificarToken();
+                    if(!$autorizado){
+                        header("HTTP/1.1 401 Não autorizado");
+                        $data = [
+                            'status' => false,
+                            'mensagem' => "Não autorizado",
+                            'descricao' => "Token Não validado",
+                            'usuario' => ""
+                        ];
+                        return json_encode($data);
+                    }
                     header("HTTP/1.1 201 Created");
-                    header('Content-Type: application/json');
                     $body = json_decode(file_get_contents('php://input'), true);
                     $usuario = $this->userManager->createUser($body);
                     if(!$usuario){
@@ -93,8 +138,18 @@ class Router {
             ],
             'PUT' => [
                 '/backend/usuario/{id}' => function ($id) {
+                    $autorizado=$this->verificarToken();
+                    if(!$autorizado){
+                        header("HTTP/1.1 401 Não autorizado");
+                        $data = [
+                            'status' => false,
+                            'mensagem' => "Não autorizado",
+                            'descricao' => "Token Não validado",
+                            'usuario' => ""
+                        ];
+                        return json_encode($data);
+                    }
                     header("HTTP/1.1 200 OK");
-                    header('Content-Type: application/json');
                     $body = json_decode(file_get_contents('php://input'), true);
                     $usuario = $this->userManager->updateUser($id, $body);
                     if(!$usuario){
@@ -117,8 +172,18 @@ class Router {
             ],
             'DELETE' => [
                 '/backend/usuario/{id}' => function ($id) {
+                    $autorizado=$this->verificarToken();
+                    if(!$autorizado){
+                        header("HTTP/1.1 401 Não autorizado");
+                        $data = [
+                            'status' => false,
+                            'mensagem' => "Não autorizado",
+                            'descricao' => "Token Não validado",
+                            'usuario' => ""
+                        ];
+                        return json_encode($data);
+                    }
                     header("HTTP/1.1 200 OK");
-                    header('Content-Type: application/json');
                     $success = $this->userManager->deleteUser($id);
                     if ($success) {
                         $data = [
@@ -137,6 +202,14 @@ class Router {
                 }
             ]
         ];
+    }
+    private function verificarToken() {
+        $headers = getallheaders();
+        $token = $headers['Authorization'] ?? null;
+        if ($token === null || !$this->userManager->isValidToken($token)) {
+            return false;
+        }
+        return true;
     }
     
 

@@ -1,10 +1,19 @@
 document.getElementById('getAllButton').addEventListener('click', getAll);
-
+var token = localStorage.getItem('token');
 function getAll() {
-    fetch('/backend/usuario') 
+    fetch('/backend/usuario', {
+        method: 'GET',
+        headers: {
+            'Authorization': token,
+        },
+    })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Sem rede ou não conseguiu localizar o recurso');
+            if (response.status === 401) {
+                throw new Error('Não autorizado');
+            } else {
+                throw new Error('Sem rede ou não conseguiu localizar o recurso');
+            }
         }
         return response.json();
     })
@@ -15,14 +24,14 @@ function getAll() {
 }
 
 function displayUsers(data) {
-    const users = data.usuarios;  // pegando o array 'usuarios' do objeto data
+    const users = data.usuarios;  
     const usersDiv = document.getElementById('usersList');
-    usersDiv.innerHTML = ''; // Limpa a lista atual
+    usersDiv.innerHTML = ''; 
 
     const list = document.createElement('ul');
     users.forEach(user => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${user.id} - ${user.nome} - ${user.email}`; // Supondo que cada usuário tenha propriedades 'id', 'nome' e 'email'
+        listItem.textContent = `${user.id} - ${user.nome} - ${user.email}`; 
         list.appendChild(listItem);
     });
 

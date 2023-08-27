@@ -38,31 +38,31 @@ button,a:hover{
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     padding: 20px;
-    width: 400px; /* Ajuste a largura conforme necessário */
+    width: 400px; 
     backdrop-filter: blur(5px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px; /* Espaço entre os elementos dentro do cartão */
+    gap: 10px; 
 }
 
 textarea {
-    width: 100%; /* Ocupa toda a largura do cartão */
-    height: 150px; /* Ajuste a altura conforme necessário */
-    resize: none; /* Evita que o usuário redimensione a área de texto */
+    width: 100%; 
+    height: 150px; 
+    resize: none; 
     border-radius: 5px;
     padding: 10px;
 }
 
 div {
-    display: flex; /* Coloca os elementos lado a lado */
-    gap: 10px; /* Espaço entre o input e o botão */
-    width: 100%; /* Ocupa toda a largura do cartão */
+    display: flex; 
+    gap: 10px; 
+    width: 100%; 
 }
 
 input {
-    flex: 1; /* Ocupa todo o espaço disponível */
+    flex: 1; 
     padding: 10px;
     border-radius: 5px;
 }
