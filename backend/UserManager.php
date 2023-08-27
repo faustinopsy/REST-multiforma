@@ -49,7 +49,7 @@ class UserManager {
             $user = new User();
             $user->setId($userData['id']);
             $user->setNome($userData['nome']);
-            $users[]=['id'=>$user->getId(),'nome'=>$user->getNome()];
+            $users[]=['id'=>$user->getId(),'nome'=>$user->getNome(),'type'=>$user->getType()];
         }
 
         return $users;

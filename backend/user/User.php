@@ -22,7 +22,7 @@ class User {
     }
 
     public function setSenha($senha) {
-        $this->senha = password_hash($senha, PASSWORD_DEFAULT)
+        $this->senha = password_hash($senha, PASSWORD_DEFAULT);
     }
     public function getSenha() {
         return $this->senha;
