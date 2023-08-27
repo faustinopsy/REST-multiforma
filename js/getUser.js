@@ -1,7 +1,12 @@
 function getUser() {
     const userId = document.getElementById("getUserId").value;
-
-    fetch('/backend/usuario/' + userId)
+    var token = localStorage.getItem('token');
+    fetch('/backend/usuario/' + userId, {
+        method: 'GET',
+        headers: {
+            'Authorization': token,
+        },
+    })
     .then(response => {
         if (!response.ok) {
             if (response.status === 401) {

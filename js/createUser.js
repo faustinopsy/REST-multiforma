@@ -1,5 +1,5 @@
 document.getElementById('submitButton').addEventListener('click', createUser);
-
+var token = localStorage.getItem('token');
 function createUser() {
     const nomeUsuario = document.getElementById('username').value;
 
@@ -15,6 +15,7 @@ function createUser() {
     fetch('/backend/usuario', { 
         method: 'POST',
         headers: {
+            'Authorization': token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(usuario)

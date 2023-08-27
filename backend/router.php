@@ -66,7 +66,7 @@ class Router {
                         'status' => true,
                         'mensagem' => "Usuário recuperado com sucesso",
                         'descricao' => "",
-                        'usuario' => $usuario->toArray()
+                        'usuario' => $usuario
                     ];
                     return json_encode($data);
                 },

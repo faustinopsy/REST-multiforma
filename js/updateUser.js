@@ -1,7 +1,7 @@
 function updateUser() {
     const userId = document.getElementById("getUserId").value;
     const userName = document.getElementById("inpuNome").value;
-
+    var token = localStorage.getItem('token');
     const usuarioAtualizado = {
         nome: userName
     };
@@ -9,6 +9,7 @@ function updateUser() {
     fetch('/backend/usuario/' + userId, { 
         method: 'PUT',
         headers: {
+            'Authorization': token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(usuarioAtualizado)

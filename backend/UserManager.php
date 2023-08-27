@@ -57,8 +57,10 @@ class UserManager {
 
     public function createUser($data) {
         $resultado= $this->model->read('users', ['nome' => $data['nome']]);
-        if($resultado[0]["nome"]==$data['nome']){
-            return false;
+        if(!empty($resultado)){
+            if($resultado[0]["nome"]==$data['nome']){
+                return false;
+            }
         }
         $user = new User();
         $user->setNome($data["nome"]);

@@ -13,6 +13,13 @@
         <a href="todos.html">Listar todos</a>
         <a href="busca.html">Buscar</a>
     </div>
-    
+    <script>
+        window.onload = function() {
+            fetch('/backend/token')
+                .then(response => response.json())
+                .then(data => localStorage.setItem('token', data.token));
+        }
+        
+    </script>
 </body>
 </html>
