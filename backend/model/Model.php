@@ -81,7 +81,7 @@ public function create($table, $data) {
         foreach ($data as $key => $value) {
             $stmt->bindValue(":$key", $value);
         }
-            return $stmt->execute();
+        return $stmt->execute();
 }
 
 public function read($table, $conditions = []) {
