@@ -15,7 +15,11 @@ function updateUser() {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Sem rede ou não conseguiu localizar o recurso');
+            if (response.status === 401) {
+                throw new Error('Não autorizado');
+            } else {
+                throw new Error('Sem rede ou não conseguiu localizar o recurso');
+            }
         }
         return response.json();
     })
