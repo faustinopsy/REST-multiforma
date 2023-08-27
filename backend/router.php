@@ -31,11 +31,16 @@ class Router {
     }
 
     private function routes() {
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+        header('Access-Control-Allow-Headers: Content-Type');
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+
         $this->routes = [
             'GET' => [
                 '/backend/usuario/{id}' => function ($id) {
                     header("HTTP/1.1 200 OK");
-                    header('Content-Type: application/json');
                     $usuario = $this->userManager->getUserById($id);
                     if(!$usuario){
                         $data = [
@@ -56,7 +61,6 @@ class Router {
                 },
                 '/backend/usuario' => function () {
                     header("HTTP/1.1 200 OK");
-                    header('Content-Type: application/json');
                     $usuarios = $this->userManager->getAllUsers();
                     $data = [
                         'status' => true,
@@ -70,7 +74,6 @@ class Router {
             'POST' => [
                 '/backend/usuario' => function () {
                     header("HTTP/1.1 201 Created");
-                    header('Content-Type: application/json');
                     $body = json_decode(file_get_contents('php://input'), true);
                     $usuario = $this->userManager->createUser($body);
                     if(!$usuario){
@@ -94,7 +97,6 @@ class Router {
             'PUT' => [
                 '/backend/usuario/{id}' => function ($id) {
                     header("HTTP/1.1 200 OK");
-                    header('Content-Type: application/json');
                     $body = json_decode(file_get_contents('php://input'), true);
                     $usuario = $this->userManager->updateUser($id, $body);
                     if(!$usuario){
@@ -118,7 +120,6 @@ class Router {
             'DELETE' => [
                 '/backend/usuario/{id}' => function ($id) {
                     header("HTTP/1.1 200 OK");
-                    header('Content-Type: application/json');
                     $success = $this->userManager->deleteUser($id);
                     if ($success) {
                         $data = [
