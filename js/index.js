@@ -25,8 +25,15 @@ const routes = [
       data: {
         
       },
+      mounted() {
+        this.loadToken();
+    },
       methods: {
-        
+        loadToken() {
+            fetch('/backend/token')
+                .then(response => response.json())
+                .then(data => localStorage.setItem('token', data.token));
+        }
       },
       template: `
       <div>

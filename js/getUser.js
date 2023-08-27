@@ -18,84 +18,137 @@ const templatedeletar =  `
 </div>`;
 
 
-    export default {
+export default {
     template: templatedeletar,
-        data() {
-            return {
-                userId: null,
-                usuario: null,
-                username: ''   
-            };
-        },
-        methods: {
-            getUser() {
-                if (!this.userId) {
-                    alert("Por favor, insira um ID válido!");
-                    return;
-                }
-
-                const usuarios = JSON.parse(localStorage.getItem('usuarios'));
-                
-                if (!usuarios) {
-                    alert("Não há usuários");
-                    return;
-                }
-        
-                this.usuario = usuarios.find(u => u.id == this.userId);
-                this.username = this.usuario ? this.usuario.nome : '';
-                this.userId = this.usuario ? this.usuario.id : '';
-                if (!this.usuario) {
-                    alert('Usuário não encontrado');
-                    this.usuario = null;
-                }
-            },
-            deleteUser() {
-                if (!this.userId) {
-                    alert("Por favor, insira um ID válido!");
-                    return;
-                }
-        
-                var usuarios = JSON.parse(localStorage.getItem('usuarios'));
-        
-                if (!usuarios) {
-                    alert("Não há usuários para deletar");
-                    return;
-                }
-        
-                const novoUsuarios = usuarios.filter(usuario => usuario.id !== this.userId);
-        
-                if (novoUsuarios.length === usuarios.length) {
-                    alert("Usuário não encontrado");
-                    return;
-                }
-        
-                localStorage.setItem('usuarios', JSON.stringify(novoUsuarios));
-                alert("Usuário deletado");
-            },
-            updateUser() {
-                if (!this.userId || !this.username) {
-                    alert("Por favor, insira um ID e um nome válidos!");
-                    return;
-                }
-        
-                const usuarios = JSON.parse(localStorage.getItem('usuarios'));
-        
-                if (!usuarios) {
-                    alert("Não há usuários");
-                    return;
-                }
-        
-                const usuarioIndex = usuarios.findIndex(u => u.id === this.userId);
-        
-                if (usuarioIndex === -1) {
-                    alert("Usuário não encontrado");
-                    return;
-                }
-        
-                usuarios[usuarioIndex].nome = this.username;
-                localStorage.setItem('usuarios', JSON.stringify(usuarios));
-        
-                alert("Usuário atualizado");
+    data() {
+        return {
+            userId: null,
+            usuario: null,
+            username: ''   
+        };
+    },
+    methods: {
+        getUser() {
+            if (!this.userId) {
+                alert("Por favor, insira um ID válido!");
+                return;
             }
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("Token não encontrado!");
+                return;
+            }
+
+            fetch('/backend/usuario/' + this.userId, {
+                method: 'GET',
+                headers: {
+                    'Authorization': token,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('Não autorizado');
+                    } else {
+                        throw new Error('Sem rede ou não conseguiu localizar o recurso');
+                    }
+                }
+                return response.json();
+            })
+            .then(data => {
+                if(!data.status){
+                    alert('Usuário não encontrado')
+                    this.username = ''; 
+                }else{
+                    this.usuario = data.usuario;
+                    this.username = this.usuario.nome;
+                } 
+            })
+            .catch(error => alert('Erro na requisição: ' + error));
+        },
+        deleteUser() {
+            if (!this.userId) {
+                alert("Por favor, insira um ID válido!");
+                return;
+            }
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("Token não encontrado!");
+                return;
+            }
+
+            fetch('/backend/usuario/' + this.userId, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': token,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('Não autorizado');
+                    } else {
+                        throw new Error('Sem rede ou não conseguiu localizar o recurso');
+                    }
+                }
+                return response.json();
+            })
+            .then(data => {
+                if(!data.status){
+                    alert("Não pode deletar");
+                }else{
+                    alert("Usuário deletado: " + JSON.stringify(data));
+                    this.username = '';
+                } 
+            })
+            .catch(error => alert('Erro na requisição: ' + error));
+        },
+        updateUser() {
+            if (!this.userId || !this.username) {
+                alert("Por favor, insira um ID e um nome válidos!");
+                return;
+            }
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("Token não encontrado!");
+                return;
+            }
+
+            const usuarioAtualizado = {
+                id: this.userId,
+                nome: this.username,
+                type: 'user',
+            };
+
+            fetch('/backend/usuario/' + this.userId, { 
+                method: 'PUT',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(usuarioAtualizado)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('Não autorizado');
+                    } else {
+                        throw new Error('Sem rede ou não conseguiu localizar o recurso');
+                    }
+                }
+                return response.json();
+            })
+            .then(data => {
+                if(!data.status){
+                    alert("Não pode atualizar");
+                }else{
+                    alert("Usuário atualizado: " + JSON.stringify(data));
+                } 
+            })
+            .catch(error => alert('Erro na requisição: ' + error));
         }
     }
+}
