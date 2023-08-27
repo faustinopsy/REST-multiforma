@@ -1,30 +1,24 @@
 function getUser() {
-    const userId = document.getElementById("getUserId").value;
-    var token = localStorage.getItem('token');
-    fetch('/backend/usuario/' + userId, {
-        method: 'GET',
-        headers: {
-            'Authorization': token,
-        },
-    })
-    .then(response => {
-        if (!response.ok) {
-            if (response.status === 401) {
-                throw new Error('Não autorizado');
-            } else {
-                throw new Error('Sem rede ou não conseguiu localizar o recurso');
-            }
-        }
-        return response.json();
-    })
-    .then(data => {
-        if(!data.status){
-            alert('Usuário não encontrado')
-            document.getElementById("inpuNome").value = ''; 
-        }else{
-            document.getElementById("inpuNome").value = data.usuario.nome; 
-        } 
-       
-    })
-    .catch(error => alert('Erro na requisição: ' + error));
+    const userId = parseInt(document.getElementById("getUserId").value);
+
+    if (!userId) {
+        alert("Por favor, insira um ID válido!");
+        return;
+    }
+
+    const usuarios = JSON.parse(localStorage.getItem('usuarios'));
+
+    if (!usuarios) {
+        alert("Não há usuários");
+        return;
+    }
+
+    const usuario = usuarios.find(u => u.id === userId);
+
+    if (!usuario) {
+        alert('Usuário não encontrado');
+        document.getElementById("inpuNome").value = ''; 
+    } else {
+        document.getElementById("inpuNome").value = usuario.nome;
+    }
 }

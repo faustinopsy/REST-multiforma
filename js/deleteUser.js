@@ -1,30 +1,26 @@
 function deleteUser() {
-    const userId = document.getElementById("getUserId").value;
-    var token = localStorage.getItem('token');
-    fetch('/backend/usuario/' + userId, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': token,
-        },
-    })
-    .then(response => {
-        if (!response.ok) {
-            if (response.status === 401) {
-                throw new Error('Não autorizado');
-            } else {
-                throw new Error('Sem rede ou não conseguiu localizar o recurso');
-            }
-        }
-        return response.json();
-    })
-    .then(data => {
-        if(!data.status){
-            alert("Não pode Deletar: ");
-        }else{
-            alert("Usuário deletado: " + JSON.stringify(data));
-            document.getElementById("inpuNome").value = ''; 
-        } 
-        
-    })
-    .catch(error => alert('Erro na requisição: ' + error));
+    const userId = parseInt(document.getElementById("getUserId").value);
+
+    if (!userId) {
+        alert("Por favor, insira um ID válido!");
+        return;
+    }
+
+    var usuarios = JSON.parse(localStorage.getItem('usuarios'));
+
+    if (!usuarios) {
+        alert("Não há usuários para deletar");
+        return;
+    }
+
+    const novoUsuarios = usuarios.filter(usuario => usuario.id !== userId);
+
+    if (novoUsuarios.length === usuarios.length) {
+        alert("Usuário não encontrado");
+        return;
+    }
+
+    localStorage.setItem('usuarios', JSON.stringify(novoUsuarios));
+    document.getElementById("inpuNome").value = ''; 
+    alert("Usuário deletado");
 }

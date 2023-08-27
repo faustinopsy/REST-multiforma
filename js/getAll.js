@@ -1,26 +1,14 @@
 document.getElementById('getAllButton').addEventListener('click', getAll);
 var token = localStorage.getItem('token');
 function getAll() {
-    fetch('/backend/usuario', {
-        method: 'GET',
-        headers: {
-            'Authorization': token,
-        },
-    })
-    .then(response => {
-        if (!response.ok) {
-            if (response.status === 401) {
-                throw new Error('Não autorizado');
-            } else {
-                throw new Error('Sem rede ou não conseguiu localizar o recurso');
-            }
-        }
-        return response.json();
-    })
-    .then(data => {
-        displayUsers(data);
-    })
-    .catch(error => alert('Erro na requisição: ' + error));
+    const usuarios = JSON.parse(localStorage.getItem('usuarios'));
+
+    if (!usuarios) {
+        alert("Não há usuários");
+        return;
+    }
+
+    displayUsers({usuarios: usuarios});
 }
 
 function displayUsers(data) {

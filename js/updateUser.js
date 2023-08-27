@@ -1,36 +1,28 @@
 function updateUser() {
-    const userId = document.getElementById("getUserId").value;
+    const userId = parseInt(document.getElementById("getUserId").value);
     const userName = document.getElementById("inpuNome").value;
-    var token = localStorage.getItem('token');
-    const usuarioAtualizado = {
-        nome: userName
-    };
 
-    fetch('/backend/usuario/' + userId, { 
-        method: 'PUT',
-        headers: {
-            'Authorization': token,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(usuarioAtualizado)
-    })
-    .then(response => {
-        if (!response.ok) {
-            if (response.status === 401) {
-                throw new Error('Não autorizado');
-            } else {
-                throw new Error('Sem rede ou não conseguiu localizar o recurso');
-            }
-        }
-        return response.json();
-    })
-    .then(data => {
-        if(!data.status){
-            alert("Não pode atualizar: ");
-        }else{
-            alert("Usuário atualizado: " + JSON.stringify(data));
-        } 
-        
-    })
-    .catch(error => alert('Erro na requisição: ' + error));
+    if (!userId || !userName) {
+        alert("Por favor, insira um ID e um nome válidos!");
+        return;
+    }
+
+    const usuarios = JSON.parse(localStorage.getItem('usuarios'));
+
+    if (!usuarios) {
+        alert("Não há usuários");
+        return;
+    }
+
+    const usuarioIndex = usuarios.findIndex(u => u.id === userId);
+
+    if (usuarioIndex === -1) {
+        alert("Usuário não encontrado");
+        return;
+    }
+
+    usuarios[usuarioIndex].nome = userName;
+    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+    alert("Usuário atualizado");
 }
