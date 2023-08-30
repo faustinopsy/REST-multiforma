@@ -1,10 +1,10 @@
 <?php
-namespace App;
+namespace App\Controller;
 
 use App\Model\Model;
 use App\User\User;
 
-class UserManager {
+class UserController {
 
     protected $model;
 	
@@ -64,7 +64,8 @@ class UserManager {
         }
         $user = new User();
         $user->setNome($data["nome"]);
-        return $this->model->create('users', ['nome' => $user->getNome()]);
+        $user->setSenha('123456');
+        return $this->model->create('users', ['nome' => $user->getNome(),'senha' => $user->getSenha()]);
     }
 
     public function updateUser($id, $data) {
@@ -75,7 +76,8 @@ class UserManager {
         $user = new User();
         $user->setId($id);
         $user->setNome($data["nome"]);
-        $sucesso= $this->model->update('users', ['nome' => $user->getNome()], ['id' => $user->getId()]);
+        $user->setSenha('123456');
+        $sucesso= $this->model->update('users', ['nome' => $user->getNome(),'senha' => $user->getSenha()], ['id' => $user->getId()]);
         if(!$sucesso){
             return false;
         }
@@ -93,10 +95,19 @@ class UserManager {
     }
 
     public function generateToken() {
-        //return bin2hex(openssl_random_pseudo_bytes(16));
-        return $this->tokens[rand(1,12)];
+        return bin2hex(openssl_random_pseudo_bytes(16));
+        //return $this->tokens[rand(1,12)];
     }
     public function isValidToken($token) {
-        return in_array($token, $this->tokens);
+        $resultado= $this->model->read('token', ['token' => $token]);
+        return $resultado;
+    }
+    function verificarToken() {
+        $headers = getallheaders();
+        $token = $headers['Authorization'] ?? null;
+        if ($token === null || !$this->isValidToken($token)) {
+            return false;
+        }
+        return true;
     }
 }
