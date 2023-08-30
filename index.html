@@ -13,24 +13,6 @@
         <a href="todos.html">Listar todos</a>
         <a href="busca.html">Buscar</a>
     </div>
-    <script>
-        window.onload = function() {
-            var token = localStorage.getItem('token');
-            fetch('/backend/token', {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-            });
-        }
-        
-    </script>
+    <script src="js/inicio.js"></script>
 </body>
 </html>

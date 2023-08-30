@@ -10,7 +10,9 @@ function getUser() {
     .then(response => {
         if (!response.ok) {
             if (response.status === 401) {
+                window.location.href = './login.html';
                 throw new Error('Não autorizado');
+               
             } else {
                 throw new Error('Sem rede ou não conseguiu localizar o recurso');
             }
