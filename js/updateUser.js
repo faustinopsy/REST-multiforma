@@ -16,7 +16,7 @@ function updateUser() {
     })
     .then(response => {
         if (!response.ok) {
-            if (response.status === 401) {
+            if (response.status === 401 || response.status === 403) {
                 window.location.href = './login.html';
                 throw new Error('Não autorizado');
             } else {
