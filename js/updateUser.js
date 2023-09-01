@@ -30,6 +30,7 @@ function updateUser() {
             alert("Não pode atualizar: ");
         }else{
             alert("Usuário atualizado: " + JSON.stringify(data));
+            window.location.href = './';
         } 
         
     })

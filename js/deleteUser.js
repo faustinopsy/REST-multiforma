@@ -23,6 +23,7 @@ function deleteUser() {
         }else{
             alert("Usuário deletado: " + JSON.stringify(data));
             document.getElementById("inpuNome").value = ''; 
+            window.location.href = './';
         } 
         
     })

@@ -36,6 +36,7 @@ function createUser() {
             alert('Usuário já existe')
         }else{
             alert("Usuário criado: " + JSON.stringify(data));
+            window.location.href = './';
         } 
        
     })
