@@ -12,6 +12,7 @@ body {
 
 .navbar {
     top: 0;
+    width: 100%;
     position: sticky; 
     background-color: #333;
     overflow: hidden;

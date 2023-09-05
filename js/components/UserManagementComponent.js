@@ -40,7 +40,7 @@ export default class UserManagementComponent {
     .then(response => {
         if (!response.ok) {
             if (response.status === 401 || response.status === 403) {
-                window.location.href = '/';
+                window.location.hash = '#/';
                 throw new Error('Não autorizado');
                
             } else {
@@ -80,7 +80,7 @@ export default class UserManagementComponent {
     .then(response => {
         if (!response.ok) {
             if (response.status === 401 || response.status === 403) {
-                window.location.href = '/';
+                window.location.hash = '#/';
                 throw new Error('Não autorizado');
             } else {
                 throw new Error('Sem rede ou não conseguiu localizar o recurso');
