@@ -52,7 +52,7 @@ export default class LoginComponent {
             if(data.token){
                 localStorage.setItem('token', data.token);
                 alert('Login bem-sucedido!');
-                window.location.href = '/todos';
+                window.location.hash = '#/todos';
             } else {
                 alert('Erro: ' + data.error);
             }

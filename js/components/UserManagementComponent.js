@@ -93,7 +93,7 @@ export default class UserManagementComponent {
             alert("Não pode atualizar: ");
         }else{
             alert("Usuário atualizado: " + JSON.stringify(data));
-            window.location.href = '/todos';
+            window.location.hash = '#/todos';
         } 
         
     })
@@ -125,7 +125,7 @@ export default class UserManagementComponent {
         }else{
             alert("Usuário deletado: " + JSON.stringify(data));
             document.getElementById("inpuNome").value = ''; 
-            window.location.href = '/todos';
+            window.location.hash = '#/todos';
         } 
         
     })

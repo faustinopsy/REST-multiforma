@@ -57,7 +57,7 @@ export default class UserFormComponent {
                 alert('Usuário já existe');
             } else {
                 alert("Usuário criado: " + JSON.stringify(data));
-                window.location.href = '/todos';
+                window.location.hash = '#/todos';
             }
         })
         .catch(error => alert('Erro na requisição: ' + error));
