@@ -19,7 +19,7 @@ const routes = {
     '/criar': userFormComponent,
     '/todos': usersListComponent,
     '/busca': userManagementComponent,
-    '/not-found': { template: '<p>Not found</p>' } // Exemplo de rota 404
+    '/not-found': { template: '<p>Not found</p>' } 
 };
 
 const router = new Router(routes);
