@@ -4,7 +4,7 @@
  private $host = "localhost";
  private $db_name = "test_drive";
  private $username = "root";
- private $password = "root123";
+ private $password = "DSMroot123";
  private $conn;
  private $db_type = "mysql"; // Opções: "mysql", "pgsql", "sqlite", "mssql"
 /*Dependendo do tipo de banco de dados escolhido, você pode precisar ajustar os parâmetros de conexão ($host, $db_name, $username e $password) da seguinte forma:
