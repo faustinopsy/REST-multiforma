@@ -52,11 +52,21 @@ class Router {
     }
     
     private function routes() {
-        $allowed_ips = ['::1', '123.123.123.124'];
-        if (!in_array($_SERVER['REMOTE_ADDR'], $allowed_ips)) {
+        $ips_permitidos = ['::1', '123.123.123.124'];
+        if (!in_array($_SERVER['REMOTE_ADDR'], $ips_permitidos)) {
             echo JsonResponse::make(['error' => 'Acesso não autorizado'], 403);
             exit;
         }
+        // $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+        // $origens_permitidas = [
+        //     'http://localhost',
+        //     'https://localhost',
+        // ];
+        
+        // if (!in_array($origin, $origens_permitidas)) {
+        //     echo JsonResponse::make(['error' => 'Acesso não autorizado'], 403);
+        //     return;
+        // }
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
