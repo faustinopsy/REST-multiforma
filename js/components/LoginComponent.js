@@ -11,7 +11,7 @@ export default class LoginComponent {
                     <input type="text" id="username" name="username"><br>
                     <label for="password">Senha:</label><br>
                     <input type="password" id="password" name="password"><br><br>
-                    <input type="submit" value="Login">
+                    <input class="btn" type="submit" value="Login">
                 </form>
             </div>
         </div>
@@ -52,7 +52,7 @@ export default class LoginComponent {
             if(data.token){
                 localStorage.setItem('token', data.token);
                 alert('Login bem-sucedido!');
-                window.location.hash = '#/todos';
+                window.location.href = '#/todos';
             } else {
                 alert('Erro: ' + data.error);
             }

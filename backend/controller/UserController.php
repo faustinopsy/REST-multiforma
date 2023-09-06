@@ -65,7 +65,9 @@ class UserController {
         $user = new User();
         $user->setNome($data["nome"]);
         $user->setSenha('123456');
-        return $this->model->create('users', ['nome' => $user->getNome(),'senha' => $user->getSenha()]);
+        $this->model->create('users', ['nome' => $user->getNome(),'senha' => $user->getSenha()]);
+        $id_user = $this->model->getLastInsertId();
+        return  $id_user;
     }
 
     public function updateUser($id, $data) {

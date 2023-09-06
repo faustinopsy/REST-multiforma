@@ -54,7 +54,11 @@ use PDOException;
             $dsn = "pgsql:host=" . $this->host . ";dbname=" . $this->db_name;
             break;
         case "sqlite":
-            $dsn = "sqlite:" . $this->db_name;
+            $dsn = "sqlite:" . "sqlite/nomeBanco.db";
+            $filepath =  "sqlite/nomeBanco.db";
+            if (!file_exists($filepath)) {
+                die("Arquivo não encontrado: $filepath");
+            }
             break;
         case "mssql":
            $dsn = "sqlsrv:Server=" . $this->host . ";Database=" . $this->db_name;
@@ -62,15 +66,22 @@ use PDOException;
         default:
             throw new Exception("Database type not supported.");
       }
-     $this->conn = new PDO($dsn, $this->username, $this->password);
-     $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  } catch (PDOException $exception) {
-      echo "Connection error: " . $exception->getMessage();
-  } catch (Exception $exception) {
-      echo $exception->getMessage();
-  }
+      if ($this->db_type == "sqlite") {
+        $this->conn = new PDO($dsn);
+    } else {
+        $this->conn = new PDO($dsn, $this->username, $this->password);
+    }
+    $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $exception) {
+        echo "Connection error: " . $exception->getMessage();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
 }
 
+public function getLastInsertId() {
+    return $this->conn->lastInsertId();
+}
 public function create($table, $data) {
         $columns = implode(", ", array_keys($data));
         $placeholders = implode(", ", array_map(function($item) {
