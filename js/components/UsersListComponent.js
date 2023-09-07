@@ -41,7 +41,6 @@ export default class UsersListComponent {
             return response.json();
         })
         .then(data => {
-            console.log(data)
             this.displayUsers(data);
         })
         .catch(error => alert('Erro na requisição: ' + error));

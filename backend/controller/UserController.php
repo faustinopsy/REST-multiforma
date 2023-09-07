@@ -116,11 +116,9 @@ class UserController {
     function limparToken() {
         $now = new DateTime();
         $currentDateTime = $now->format('Y-m-d H:i:s');
-        $headers = getallheaders();
-        $token = $headers['Authorization'] ?? null;
-        $resultado= $this->model->read('token', ['token' => $token]);
-        if(!$resultado){
-            return $this->model->delete('token', ["tempo" => "  <= '$currentDateTime'"]);
+        $resultado= $this->model->read('token');
+        if($resultado){
+            $this->model->deleteWithCustomCondition('token', "tempo <= '$currentDateTime'");
         }
        return true;
        

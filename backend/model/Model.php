@@ -141,4 +141,9 @@ public function delete($table, $conditions) {
         }
         return $stmt->execute();
     }
+    public function deleteWithCustomCondition($table, $condition) {
+        $query = "DELETE FROM $table WHERE $condition";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute();
+    }
 }
