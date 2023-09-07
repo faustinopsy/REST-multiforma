@@ -6,7 +6,7 @@
  private $username = "root";
  private $password = "root123";
  private $conn;
- private $db_type = "mysql"; // Opções: "mysql", "pgsql", "sqlite", "mssql"
+ private $db_type = "sqlite"; // Opções: "mysql", "pgsql", "sqlite", "mssql"
 /*Dependendo do tipo de banco de dados escolhido, você pode precisar ajustar os parâmetros de conexão ($host, $db_name, $username e $password) da seguinte forma:
 
           MySQL:
@@ -51,7 +51,11 @@
             $dsn = "pgsql:host=" . $this->host . ";dbname=" . $this->db_name;
             break;
         case "sqlite":
-            $dsn = "sqlite:" . $this->db_name;
+            $dsn = "sqlite:" . "sqlite/test_drive.db";
+            $filepath =  "sqlite/test_drive.db";
+            if (!file_exists($filepath)) {
+                die("Arquivo não encontrado: $filepath");
+            }
             break;
         case "mssql":
            $dsn = "sqlsrv:Server=" . $this->host . ";Database=" . $this->db_name;
@@ -59,15 +63,21 @@
         default:
             throw new Exception("Database type not supported.");
       }
-     $this->conn = new PDO($dsn, $this->username, $this->password);
-     $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  } catch (PDOException $exception) {
-      echo "Connection error: " . $exception->getMessage();
-  } catch (Exception $exception) {
-      echo $exception->getMessage();
-  }
+      if ($this->db_type == "sqlite") {
+        $this->conn = new PDO($dsn);
+    } else {
+        $this->conn = new PDO($dsn, $this->username, $this->password);
+    }
+    $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $exception) {
+        echo "Connection error: " . $exception->getMessage();
+    } catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
 }
-
+public function getLastInsertId() {
+    return $this->conn->lastInsertId();
+}
 public function create($table, $data) {
     $columns = implode(", ", array_keys($data));
     $placeholders = implode(", ", array_map(function($item) {

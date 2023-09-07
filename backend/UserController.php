@@ -2,7 +2,7 @@
 require_once 'Model.php';
 require_once 'User.php';
 
-class UserManager {
+class UserController {
 
     protected $model;
     private $tokens = [
@@ -95,5 +95,10 @@ class UserManager {
     public function isValidToken($token) {
         return in_array($token, $this->tokens);
     }
-    
+    function limparToken() {
+        $now = new DateTime();
+        $currentDateTime = $now->format('Y-m-d H:i:s');
+        return $this->model->delete('token', ['token' => $currentDateTime]);
+       
+    }
 }

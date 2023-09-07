@@ -1,5 +1,5 @@
 <?php
-require 'UserManager.php';
+require 'UserController.php';
 class Router {
     private $requestMethod;
     private $uri;
@@ -9,8 +9,8 @@ class Router {
 
     public function __construct($requestMethod, $uri) {
         $this->requestMethod = $requestMethod;
-        $this->uri = $uri;
-        $this->userManager = new UserManager();
+        $this->uri = $uri; 
+        $this->userManager = new UserController();
         $this->routes();
     }
 
