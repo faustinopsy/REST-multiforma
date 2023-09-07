@@ -24,20 +24,24 @@ export default class UsersListComponent {
             method: 'GET',
             headers: {
                 'Authorization': this.token,
-            },
+                'Content-Type': 'application/json'
+            }
         })
         .then(response => {
             if (!response.ok) {
-                if (response.status === 401 || response.status === 403) {
-                    window.location.hash = '#/';
-                    throw new Error('Não autorizado');
-                } else {
-                    throw new Error('Sem rede ou não conseguiu localizar o recurso');
-                }
+                return response.json().then(errorData => {
+                    if (response.status === 401 || response.status === 403) {
+                        window.location.hash = '#/';
+                        throw new Error(errorData.error.error);
+                    } else {
+                        throw new Error('Sem rede ou não conseguiu localizar o recurso');
+                    }
+                });
             }
             return response.json();
         })
         .then(data => {
+            console.log(data)
             this.displayUsers(data);
         })
         .catch(error => alert('Erro na requisição: ' + error));

@@ -1,6 +1,7 @@
 <?php
 require '../vendor/autoload.php';  
 
+use App\Middleware\Autorizacao;
 use App\Response\JsonResponse;
 use \Firebase\JWT\JWT;
 use App\Model\Model;
@@ -10,18 +11,24 @@ use App\Router;
 $algoritimo='HS256';
 $model = new Model();
 $user = new User();
+$usercontroller;
+
 
 $usercontroller = new UserController();
-$allowed_ips = ['::1', '123.123.123.124'];
-if (!in_array($_SERVER['REMOTE_ADDR'], $allowed_ips)) {
-    echo JsonResponse::make(['error' => 'Acesso não autorizado'], 403);
-    exit;
-}
+$ip=isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
 
+$autorizado = new Autorizacao();
+$autorizado->autorizados($ip,$origin);
 $secretKey = $usercontroller->generateToken();
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (isset($data['username']) && isset($data['password'])) {
+
+  
+
+
+
     $username = $data['username'];
     $password = $data['password'];
     
@@ -30,9 +37,7 @@ if (isset($data['username']) && isset($data['password'])) {
 
     $data = $model->read('users', ['nome' => $username]);
     if (!$data) {
-        http_response_code(500);
-        echo json_encode(['error' => 'Erro interno do servidor.']);
-        exit;
+        return JsonResponse::make(['error' => 'Erro interno do servidor.'], 500);
     }
     if (!empty($data) && password_verify($password, $data[0]['senha'])) {
         $user->setId($data[0]['id']);
@@ -53,11 +58,9 @@ if (isset($data['username']) && isset($data['password'])) {
         $model->create('token', ['id_user' => $user->getId(),'token'=> $jwt]);
         echo json_encode(['token' => $jwt]);
     } else {
-        http_response_code(401);
-        echo json_encode(['error' => 'Nome de usuário ou senha inválidos.']);
+        return JsonResponse::make(['error' => 'Nome de usuário ou senha inválidos.'], 401);
     }
 } else {
-    http_response_code(400);
-    echo json_encode(['error' => 'Requisição inválida.']);
+    return JsonResponse::make(['error' => 'requisição inválida.'], 400);
 }
 

@@ -9,11 +9,13 @@ class Router {
     private $uri;
     private $routes;
     private $usercontroller;
+    private $autorizado;
 
     public function __construct($requestMethod, $uri) {
         $this->requestMethod = $requestMethod;
         $this->uri = $uri;
         $this->usercontroller = new UserController();
+        $this->autorizado = new Autorizacao($this->usercontroller);
         $this->routes();
     }
     public function run() {
@@ -53,24 +55,13 @@ class Router {
     }
     
     private function routes() {
-        $ips_permitidos = ['::1', '216.172.172.207'];
-        if (!in_array($_SERVER['REMOTE_ADDR'], $ips_permitidos)) {
-            echo JsonResponse::make(['error' => 'Acesso não autorizado'], 403);
-            exit;
-        }
-        // $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
-        // $origens_permitidas = [
-        //     'http://localhost',
-        //     'https://localhost',
-        // ];
-        
-        // if (!in_array($origin, $origens_permitidas)) {
-        //     echo JsonResponse::make(['error' => 'Acesso não autorizado'], 403);
-        //     return;
-        // }
+        $ip=isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+        $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+        $this->autorizado->autorizados($ip,$origin);
+
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+        header('Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, DELETE');
         header('Access-Control-Allow-Headers: Content-Type');
         header('Cache-Control: no-cache, no-store, must-revalidate');
         $this->routes = [
@@ -167,6 +158,12 @@ class Router {
                         ];
                     }
                     return JsonResponse::make($data, 200);
+                }
+            ],
+            'OPTIONS' => [
+                '/backend/usuario' => function() {
+                    header('HTTP/1.1 200 OK');
+                    return;
                 }
             ]
         ];
