@@ -55,7 +55,11 @@ export default class LoginComponent {
             if(data.token){
                 localStorage.setItem('token', data.token);
                 alert('Login bem-sucedido!');
-                window.location.href = '#/todos';
+            window.onload = function() {
+                setTimeout(function() {
+                    window.location.href = '#/todos';
+                }, 500); 
+            };
             } else {
                 alert('Erro: ' + data.error);
             }
