@@ -5,16 +5,17 @@ class Router {
     private $uri;
     private $routes;
 
-    private $userManager;
+    private $userController;
 
     public function __construct($requestMethod, $uri) {
         $this->requestMethod = $requestMethod;
         $this->uri = $uri; 
-        $this->userManager = new UserController();
+        $this->userController = new UserController();
         $this->routes();
     }
 
     public function run() {
+        $this->userController->limparToken();
         try {
             $ponte = $this->procurarPonte();
 
@@ -52,7 +53,7 @@ class Router {
                         return json_encode($data);
                     }
                     header("HTTP/1.1 200 OK");
-                    $usuario = $this->userManager->getUserById($id);
+                    $usuario = $this->userController->getUserById($id);
                     if(!$usuario){
                         $data = [
                             'status' => false,
@@ -83,7 +84,7 @@ class Router {
                         return json_encode($data);
                     }
                     header("HTTP/1.1 200 OK");
-                    $usuarios = $this->userManager->getAllUsers();
+                    $usuarios = $this->userController->getAllUsers();
                     $data = [
                         'status' => true,
                         'mensagem' => "Usuários recuperados com sucesso",
@@ -94,7 +95,7 @@ class Router {
                 },
                 '/backend/token' => function () {
                     header("HTTP/1.1 200 OK");
-                    $token = $this->userManager->generateToken();
+                    $token = $this->userController->generateToken();
                     $data = [
                         'status' => true,
                         'token' => $token,
@@ -117,7 +118,7 @@ class Router {
                     }
                     header("HTTP/1.1 201 Created");
                     $body = json_decode(file_get_contents('php://input'), true);
-                    $usuario = $this->userManager->createUser($body);
+                    $usuario = $this->userController->createUser($body);
                     if(!$usuario){
                         $data = [
                             'status' => false,
@@ -151,7 +152,7 @@ class Router {
                     }
                     header("HTTP/1.1 200 OK");
                     $body = json_decode(file_get_contents('php://input'), true);
-                    $usuario = $this->userManager->updateUser($id, $body);
+                    $usuario = $this->userController->updateUser($id, $body);
                     if(!$usuario){
                         $data = [
                             'status' => false,
@@ -184,7 +185,7 @@ class Router {
                         return json_encode($data);
                     }
                     header("HTTP/1.1 200 OK");
-                    $success = $this->userManager->deleteUser($id);
+                    $success = $this->userController->deleteUser($id);
                     if ($success) {
                         $data = [
                             'status' => true,
@@ -206,7 +207,7 @@ class Router {
     private function verificarToken() {
         $headers = getallheaders();
         $token = $headers['Authorization'] ?? null;
-        if ($token === null || !$this->userManager->isValidToken($token)) {
+        if ($token === null || !$this->userController->isValidToken($token)) {
             return false;
         }
         return true;
