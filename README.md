@@ -50,10 +50,15 @@ Este projeto é uma API simples que permite criar, ler, atualizar e excluir usu�
 
 ## Rotas
 GET /backend/usuario/{id}: Recupera um usuário pelo ID.
+
 GET /backend/usuario: Recupera todos os usuários.
+
 POST /backend/usuario: Cria um novo usuário.
+
 PUT /backend/usuario/{id}: Atualiza um usuário existente pelo ID.
+
 DELETE /backend/usuario/{id}: Exclui um usuário pelo ID.
+
 ## Inicialização
 Para iniciar o projeto, siga estas etapas:
 
