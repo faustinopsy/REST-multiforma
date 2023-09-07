@@ -3,6 +3,8 @@ Este repositório contém um projeto simples de API CRUD que permite a criação
 
 A branch main contém a versão do projeto que NÃO segue a PSR-4, para os exemplos com PSR veja as branchs desse projeto, há no minimo 4 branchs com formatos diferentes.
 As branchs (com_psr) contém a versão do projeto que segue a PSR-4.
+a branch mais completa neste projeto é (https://github.com/faustinopsy/REST-multiforma/tree/com_psr_com_banco_componentes_puros)
+Lembrando que o proejto é didatico para alunos de desenvolvimento de sistemas entederem a evolução de uma sistema, conforme a divisão das branchs, pois cada branch desse projeto possui uma forma.
 PSR-4
 A PSR-4 é uma recomendação da PHP-FIG que define um padrão de autoloading de classes que permite a interoperabilidade de código entre diferentes projetos e suas bibliotecas.
 
