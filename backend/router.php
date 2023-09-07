@@ -53,7 +53,7 @@ class Router {
     }
     
     private function routes() {
-        $ips_permitidos = ['::1', '123.123.123.124'];
+        $ips_permitidos = ['::1', '216.172.172.207'];
         if (!in_array($_SERVER['REMOTE_ADDR'], $ips_permitidos)) {
             echo JsonResponse::make(['error' => 'Acesso não autorizado'], 403);
             exit;
