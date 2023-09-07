@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Model\Model;
 use App\User\User;
+use DateTime;
 
 class UserController {
 
@@ -64,7 +65,7 @@ class UserController {
         }
         $user = new User();
         $user->setNome($data["nome"]);
-        $user->setSenha('123456');
+        $user->setSenha('admin');
         $this->model->create('users', ['nome' => $user->getNome(),'senha' => $user->getSenha()]);
         $id_user = $this->model->getLastInsertId();
         return  $id_user;
@@ -111,5 +112,11 @@ class UserController {
             return false;
         }
         return true;
+    }
+    function limparToken() {
+        $now = new DateTime();
+        $currentDateTime = $now->format('Y-m-d H:i:s');
+        return $this->model->delete('token', ['token' => $currentDateTime]);
+       
     }
 }

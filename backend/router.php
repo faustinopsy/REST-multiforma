@@ -17,6 +17,7 @@ class Router {
         $this->routes();
     }
     public function run() {
+        $this->usercontroller->limparToken();
         try {
             $ponte = $this->procuraPonte();
     

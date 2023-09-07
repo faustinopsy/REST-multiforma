@@ -9,7 +9,7 @@ use PDOException;
  private $username = "root";
  private $password = "root123";
  private $conn;
- private $db_type = "mysql"; // Opções: "mysql", "pgsql", "sqlite", "mssql"
+ private $db_type = "sqlite"; // Opções: "mysql", "pgsql", "sqlite", "mssql"
 /*Dependendo do tipo de banco de dados escolhido, você pode precisar ajustar os parâmetros de conexão ($host, $db_name, $username e $password) da seguinte forma:
 
           MySQL:
@@ -54,8 +54,8 @@ use PDOException;
             $dsn = "pgsql:host=" . $this->host . ";dbname=" . $this->db_name;
             break;
         case "sqlite":
-            $dsn = "sqlite:" . "sqlite/nomeBanco.db";
-            $filepath =  "sqlite/nomeBanco.db";
+            $dsn = "sqlite:" . "sqlite/test_drive.db";
+            $filepath =  "sqlite/test_drive.db";
             if (!file_exists($filepath)) {
                 die("Arquivo não encontrado: $filepath");
             }
