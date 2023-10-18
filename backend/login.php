@@ -12,8 +12,8 @@ $model = new Model();
 $user = new User();
 
 $usercontroller = new UserController();
-$allowed_ips = ['::1', '123.123.123.124'];
-if (!in_array($_SERVER['REMOTE_ADDR'], $allowed_ips)) {
+$ipautorizado = ['::1', '123.123.123.124'];
+if (!in_array($_SERVER['REMOTE_ADDR'], $ipautorizado)) {
     echo JsonResponse::make(['error' => 'Acesso não autorizado'], 403);
     exit;
 }

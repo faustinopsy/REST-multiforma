@@ -1,8 +1,8 @@
 document.getElementById('loginForm').addEventListener('submit', function(event){
     event.preventDefault();
     
-    var username = document.getElementById('username').value;
-    var password = document.getElementById('password').value;
+    var email = document.getElementById('email').value;
+    var senha = document.getElementById('senha').value;
     
     fetch('/backend/login.php', {
         method: 'POST',
@@ -10,12 +10,10 @@ document.getElementById('loginForm').addEventListener('submit', function(event){
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            username: username,
-            password: password
+            username: email,
+            password: senha
         }),
-    })
-    
-    .then(response => {
+    }).then(response => {
         if (!response.ok) {
             if (response.status === 401 || response.status === 403) {
                 throw new Error('Não autorizado');
@@ -26,8 +24,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event){
             
         }
         return response.json();
-    })
-    .then(data => {
+    }).then(data => {
         if(data.token){
             localStorage.setItem('token', data.token)
             
