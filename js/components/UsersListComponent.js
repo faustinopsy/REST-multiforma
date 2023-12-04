@@ -20,7 +20,7 @@ export default class UsersListComponent {
     }
 
     getAll() {
-        fetch('/backend/usuario', {
+        fetch('http://localhost:8089/usuario', {
             method: 'GET',
             headers: {
                 'Authorization': this.token,

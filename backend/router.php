@@ -15,7 +15,7 @@ class Router {
         $this->requestMethod = $requestMethod;
         $this->uri = $uri;
         $this->usercontroller = new UserController();
-        $this->autorizado = new Autorizacao($this->usercontroller);
+        //$this->autorizado = new Autorizacao($this->usercontroller);
         $this->routes();
     }
     public function run() {
@@ -57,16 +57,16 @@ class Router {
     private function routes() {
         $ip=isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
         $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
-        $this->autorizado->autorizados($ip,$origin);
+        //$this->autorizado->autorizados($ip,$origin);
 
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
         header('Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, DELETE');
-        header('Access-Control-Allow-Headers: Content-Type');
         header('Cache-Control: no-cache, no-store, must-revalidate');
         $this->routes = [
             'GET' => [
-                '/backend/usuario/{id}' => function ($id) {
+                '/usuario/{id}' => function ($id) {
                     $usuario = $this->usercontroller->getUserById($id);
                     if(!$usuario){
                         $data = [
@@ -75,7 +75,7 @@ class Router {
                             'descricao' => "",
                             'usuario' => ""
                         ];
-                        return JsonResponse::make($data, 200);
+                        echo json_encode($data, 200);
                     }
                     $data = [
                         'status' => true,
@@ -83,9 +83,9 @@ class Router {
                         'descricao' => "",
                         'usuario' => $usuario
                     ];
-                    return JsonResponse::make($data, 200);
+                    echo json_encode($data, 200);
                 },
-                '/backend/usuario' => function () {
+                '/usuario' => function () {
                     $usuarios = $this->usercontroller->getAllUsers();
                     $data = [
                         'status' => true,
@@ -93,11 +93,11 @@ class Router {
                         'descricao' => "",
                         'usuarios' => $usuarios
                     ];
-                    return JsonResponse::make($data, 200);
+                    echo json_encode($data, 200);
                 }
             ],
             'POST' => [
-                '/backend/usuario' => function () {
+                '/usuario' => function () {
                     $body = json_decode(file_get_contents('php://input'), true);
                     $usuario = $this->usercontroller->createUser($body);
                     if(!$usuario){
@@ -107,7 +107,7 @@ class Router {
                             'descricao' => "",
                             'usuario' => ""
                         ];
-                        return JsonResponse::make($data, 200);
+                        echo json_encode($data, 200);
                     }
                     $data = [
                         'status' => true,
@@ -115,11 +115,11 @@ class Router {
                         'descricao' => "",
                         'usuario' => $usuario
                     ];
-                    return JsonResponse::make($data, 201);
+                    echo json_encode($data, 201);
                 }
             ],
             'PUT' => [
-                '/backend/usuario/{id}' => function ($id) {
+                '/usuario/{id}' => function ($id) {
                     header('Content-Type: application/json');
                     $body = json_decode(file_get_contents('php://input'), true);
                     $usuario = $this->usercontroller->updateUser($id, $body);
@@ -130,7 +130,7 @@ class Router {
                             'descricao' => "",
                             'usuario' => ""
                         ];
-                        return JsonResponse::make($data, 200);
+                        echo json_encode($data, 200);
                     }
                     $data = [
                         'status' => true,
@@ -138,11 +138,11 @@ class Router {
                         'descricao' => "",
                         'usuario' => $id
                     ];
-                    return JsonResponse::make($data, 200);
+                    echo json_encode($data, 200);
                 }
             ],
             'DELETE' => [
-                '/backend/usuario/{id}' => function ($id) {
+                '/usuario/{id}' => function ($id) {
                     $success = $this->usercontroller->deleteUser($id);
                     if ($success) {
                         $data = [
@@ -157,11 +157,11 @@ class Router {
                             'descricao' => "Ocorreu um problema ao tentar deletar o usuário com ID $id"
                         ];
                     }
-                    return JsonResponse::make($data, 200);
+                    echo json_encode($data, 200);
                 }
             ],
             'OPTIONS' => [
-                '/backend/usuario' => function() {
+                '/usuario' => function() {
                     header('HTTP/1.1 200 OK');
                     return;
                 }

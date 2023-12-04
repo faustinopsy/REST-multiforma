@@ -1,0 +1,30 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile-backend
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./backend:/usr/src/backend
+      - ./vendor:/usr/src/vendor
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile-frontend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/usr/src/frontend
+  # db:
+  #   image: mysql
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: senha
+  #     MYSQL_DATABASE: banco
+  #   volumes:
+  #     - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

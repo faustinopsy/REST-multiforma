@@ -33,10 +33,10 @@ export default class UserFormComponent {
             nome: nomeUsuario
         };
 
-        fetch('/backend/usuario', { 
+        fetch('http://localhost:8089/usuario', { 
             method: 'POST',
             headers: {
-                'Authorization': this.token,
+               // 'Authorization': this.token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(usuario)

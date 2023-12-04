@@ -28,7 +28,7 @@ export default class LoginComponent {
         var username = document.getElementById('username').value;
         var password = document.getElementById('password').value;
     
-        fetch('/backend/login.php', {
+        fetch('http://localhost:8089/login.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

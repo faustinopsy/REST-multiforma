@@ -31,10 +31,10 @@ export default class UserManagementComponent {
     getUser() {
         const userId = document.getElementById("getUserId").value;
     var token = localStorage.getItem('token');
-    fetch('/backend/usuario/' + userId, {
+    fetch('http://localhost:8089/usuario/' + userId, {
         method: 'GET',
         headers: {
-            'Authorization': token,
+            //'Authorization': token,
         },
     })
     .then(response => {
@@ -70,10 +70,10 @@ export default class UserManagementComponent {
         nome: userName
     };
 
-    fetch('/backend/usuario/' + userId, { 
+    fetch('http://localhost:8089/usuario/' + userId, { 
         method: 'PUT',
         headers: {
-            'Authorization': token,
+            //'Authorization': token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(usuarioAtualizado)
@@ -104,10 +104,10 @@ export default class UserManagementComponent {
     deleteUser() {
         const userId = document.getElementById("getUserId").value;
     var token = localStorage.getItem('token');
-    fetch('/backend/usuario/' + userId, {
+    fetch('http://localhost:8089/usuario/' + userId, {
         method: 'DELETE',
         headers: {
-            'Authorization': token,
+           // 'Authorization': token,
         },
     })
     .then(response => {

@@ -103,7 +103,11 @@ class UserController {
     }
     public function isValidToken($token) {
         $resultado= $this->model->read('token', ['token' => $token]);
-        return $resultado;
+        if (count($resultado) == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
     function verificarToken() {
         $headers = getallheaders();

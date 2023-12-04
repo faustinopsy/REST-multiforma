@@ -1,0 +1,6 @@
+# Dockerfile-frontend
+FROM python:alpine
+COPY . /usr/src/frontend
+WORKDIR /usr/src/frontend
+EXPOSE 8000
+CMD ["python", "-m", "http.server", "8000"]

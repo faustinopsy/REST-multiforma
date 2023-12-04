@@ -8,10 +8,10 @@ class Autorizacao
     private $userController;
     private $ipsPermitidos;
     private $origesPermitidas;
-    public function __construct()
-    {
-        $this->userController = new UserController();
-        $this->ipsPermitidos = ['::1', '216.172.172.*'];
+    public function __construct($controller)
+    { 
+        $this->userController = $controller;
+        $this->ipsPermitidos = ['::1', '172.18.0.1','216.172.172.*'];
         $this->origesPermitidas= [
             'http://localhost',
             'http://restfull.faustinopsy.com',
@@ -21,11 +21,13 @@ class Autorizacao
 
     public function verificarToken($request, $next)
     {
-        $headers = getallheaders();
-        $token = $headers['Authorization'] ?? null;
-        if ($token === null || !$this->userController->isValidToken($token)) {
-            return JsonResponse::make(['error' => 'Não autorizado'], 401);
-        }
+        
+        // $headers = getallheaders();
+        
+        // $token = $headers['Authorization'] ;
+        // if ($this->userController->isValidToken($token)) {
+        //     echo JsonResponse::make(['error' => 'Não autorizado'], 401);
+        // }
         
 
         return $next($request);

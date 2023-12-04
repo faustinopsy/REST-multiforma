@@ -1,0 +1,7 @@
+FROM php:7.4-cli
+COPY composer.json /usr/src/
+COPY vendor /usr/src/vendor
+COPY backend /usr/src/backend
+WORKDIR /usr/src
+
+CMD [ "php", "-S", "0.0.0.0:8089", "-t", "backend" ]

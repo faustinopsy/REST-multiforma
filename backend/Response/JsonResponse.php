@@ -6,9 +6,9 @@ class JsonResponse
     public static function make($data, $status)
     {
         header("HTTP/1.1 $status");
-        if($status!=200){
-            return json_encode(['error' => $data, 'status' => $status]);
+        if($status!=200 || $status!=201){
+            echo json_encode(['error' => $data, 'status' => $status]);
         }
-        return json_encode($data);
+        echo json_encode($data);
     }
 }
